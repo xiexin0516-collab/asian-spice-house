@@ -1,0 +1,99 @@
+---
+description: High-level roadmap for improving the existing Asian Spice House ecommerce site without adding new major features.
+alwaysApply: true
+---
+
+# Improvement Roadmap (No New Major Features)
+
+Use these phases when working on this project. Move顺序时，请优先保证前一阶段基本稳定后，再进入下一阶段。
+
+## Phase 1 — Stabilize Existing Site
+
+- 只**打磨和修复**现有电商流程，不增加新功能。
+- 检查并修复以下页面的逻辑和 UI：
+  - Home / Shop / Cooking Kits / Recipes
+  - Spice detail / Recipe detail / Kit detail
+  - Cart / Checkout
+- 确保：
+  - 所有链接都能正常跳转（无 404 / 报错）。
+  - 所有图片都能正常加载（无断图）。
+  - 产品页面渲染一致（标题、价格、图片、按钮等布局统一）。
+  - 购物车数量和小计 / 总价更新正确。
+  - Checkout 能正确在 Supabase 中创建 `orders` 和 `order_items`。
+  - 浏览器控制台无明显报错。
+
+## Phase 2 — Language UI（English-first）
+
+- 保持现有语言下拉 UI，不改样式和选项：
+  - EN / 简体中文 / 繁體中文 / 日本語 / 한국어 / Tiếng Việt / Spanish（未来）。
+- 采用 **English-first** 策略：
+  - 目前只有英文是完整支持语言，其它语言视为 UI 占位。
+  - 切换语言**不能导致页面白屏或报错**。
+  - 没有翻译时**回退到英文**展示即可。
+- 暂时不要实现完整的 i18n/多语言系统。
+
+## Phase 3 — Currency Standardization（USD）
+
+- 站点主要面向**在美国的亚洲用户**。
+- 所有价格展示统一改为 **美元 $**，示例：
+  - `$4.00`、`$9.50`、`$12.75`
+- 覆盖范围：
+  - 商品卡片、商品详情、套装、Cart、Checkout、订单汇总等所有价格展示。
+- 数据库中价格字段保持**纯数字**（不存货币符号）。
+
+## Phase 4 — UI Consistency & Polish
+
+- 在现有配色和字体基础上做小幅优化，不做大规模重设计。
+- 重点检查：
+  - 区块之间的间距是否统一、舒适。
+  - 标题 / 正文 / 按钮的排版和字号是否一致。
+  - 按钮样式、hover 效果、阴影的一致性。
+  - 商品卡片布局和图片比例是否统一。
+- 目标：整体观感像一个**一致、高级的香料品牌站点**。
+
+## Phase 5 — Mobile Responsiveness
+
+- 用常见移动端宽度（例如 375 / 414）通览整个站点。
+- 优化：
+  - Header 高度和菜单折叠行为。
+  - Hero / Banner 图片在竖屏下的裁剪与比例。
+  - 商品网格的间距与列数。
+  - 按钮点击区域（tap area）是否足够大。
+  - Checkout 表单在小屏下的输入体验。
+
+## Phase 6 — Basic Error Handling
+
+- 改善常见边缘情况的反馈：
+  - 商品列表为空。
+  - Recipes 列表为空。
+  - Supabase 查询失败。
+  - Checkout 创建订单失败。
+- 用简单、清晰的文案提示，例如：
+  - “No products available”
+  - “Something went wrong. Please try again.”
+
+## 转化优先级（Conversion — 开发顺序）
+
+在 Phase 1–6 基本稳定后，按以下顺序做**电商转化**相关开发（先产品页，再评论，再信任）：
+
+| 优先级 | 模块 | 要完善的内容 |
+|--------|------|----------------|
+| **1** | **产品页** | 必须已有：Product images、Price、Add to Cart；需补齐/统一：★★★★★ rating 展示、Description、Ingredients、How to use、Origin、Reviews 区块。美国用户最看重产品页上的评分与评论数（如 4.8 / 124 reviews）。 |
+| **2** | **评论系统** | 单表 `reviews`（id, product_id, rating, name, comment, created_at, verified）。前台：星级、评语、署名、Verified Buyer 展示；支持提交评论。 |
+| **3** | **信任元素** | 在 Add to Cart 下方增加短句：✓ Secure checkout、✓ Free shipping over $50、✓ Premium sourced spices、✓ 30-day satisfaction guarantee。 |
+
+**继续完善什么**：当前若 Phase 1–6 已够用，则下一步先做 **产品页完善**（含评分与评论展示），再做评论系统，最后做信任文案。
+
+---
+
+## Out of Scope（当前阶段禁止实现）
+
+在完成以上阶段前，**不要主动实现**以下功能：
+
+- 密码重置 / 忘记密码流程。
+- 邮件验证 / 激活流程。
+- Stripe / PayPal 等真实支付集成。
+- Admin 后台 / CMS / 商品管理界面。
+- 库存管理、自动扣库存逻辑。
+- 完整多语言翻译系统（翻译文件、翻译后台等）。
+
