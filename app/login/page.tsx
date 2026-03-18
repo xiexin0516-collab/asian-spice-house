@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -11,10 +12,18 @@ import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/browser"
 import { ArrowLeft } from "lucide-react"
 
-export default function LoginPage() {
-  const router = useRouter()
+function NextDestination({ onNext }: { onNext: (next: string) => void }) {
   const searchParams = useSearchParams()
   const next = searchParams.get("next") ?? "/"
+  useEffect(() => {
+    onNext(next)
+  }, [next, onNext])
+  return null
+}
+
+export default function LoginPage() {
+  const router = useRouter()
+  const [next, setNext] = useState("/")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -41,6 +50,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
+      <Suspense fallback={null}>
+        <NextDestination onNext={setNext} />
+      </Suspense>
       <main className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm space-y-8">
           <div>
