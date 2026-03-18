@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useEffect, useMemo, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -14,6 +14,15 @@ const categoryFiltersFromCategories = (categories: Category[]) => [
   ...categories.filter((c) => c.slug !== "kits"),
 ]
 
+function CategoryFromQuery({ onCategory }: { onCategory: (category: string) => void }) {
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get("category") ?? "all"
+  useEffect(() => {
+    onCategory(categoryParam)
+  }, [categoryParam, onCategory])
+  return null
+}
+
 export function ShopClient({
   spices,
   categories,
@@ -23,9 +32,7 @@ export function ShopClient({
   categories: Category[]
   loadError?: boolean
 }) {
-  const searchParams = useSearchParams()
-  const categoryParam = searchParams.get("category")
-  const [activeCategory, setActiveCategory] = useState(categoryParam || "all")
+  const [activeCategory, setActiveCategory] = useState("all")
 
   const categoryFilters = categoryFiltersFromCategories(categories)
   const filteredProducts = useMemo(() => {
@@ -36,6 +43,9 @@ export function ShopClient({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
+      <Suspense fallback={null}>
+        <CategoryFromQuery onCategory={setActiveCategory} />
+      </Suspense>
 
       <main className="flex-1">
         <section className="bg-secondary py-16 lg:py-20">
