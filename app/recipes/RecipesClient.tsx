@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useEffect, useMemo, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -11,6 +11,15 @@ import { Clock, Users, ArrowRight } from "lucide-react"
 import type { CuisineInfo, Recipe } from "@/lib/data"
 import { SubscribeForm } from "@/components/subscribe-form"
 
+function CuisineFromQuery({ onCuisine }: { onCuisine: (cuisine: string) => void }) {
+  const searchParams = useSearchParams()
+  const cuisineParam = searchParams.get("cuisine") ?? "all"
+  useEffect(() => {
+    onCuisine(cuisineParam)
+  }, [cuisineParam, onCuisine])
+  return null
+}
+
 export function RecipesClient({
   recipes,
   cuisines,
@@ -20,9 +29,7 @@ export function RecipesClient({
   cuisines: CuisineInfo[]
   spiceNamesByRecipeId: Record<string, string>
 }) {
-  const searchParams = useSearchParams()
-  const cuisineParam = searchParams.get("cuisine")
-  const [activeCuisine, setActiveCuisine] = useState(cuisineParam || "all")
+  const [activeCuisine, setActiveCuisine] = useState("all")
 
   const cuisineFilters = [
     { name: "All", slug: "all" },
@@ -36,6 +43,9 @@ export function RecipesClient({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
+      <Suspense fallback={null}>
+        <CuisineFromQuery onCuisine={setActiveCuisine} />
+      </Suspense>
 
       <main className="flex-1">
         <section className="bg-secondary py-16 lg:py-20">
