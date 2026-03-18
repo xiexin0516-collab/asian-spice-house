@@ -2,15 +2,24 @@
 
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 import { CheckCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 
-export default function CheckoutSuccessPage() {
+function OrderReference() {
   const searchParams = useSearchParams()
   const orderId = searchParams.get("order")
+  if (!orderId) return null
+  return (
+    <span className="block mt-1 text-sm">
+      Order reference: <span className="font-mono">{orderId.slice(0, 8)}</span>
+    </span>
+  )
+}
 
+export default function CheckoutSuccessPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -22,11 +31,9 @@ export default function CheckoutSuccessPage() {
           </h1>
           <p className="mt-2 text-muted-foreground">
             Your order has been placed successfully.
-            {orderId && (
-              <span className="block mt-1 text-sm">
-                Order reference: <span className="font-mono">{orderId.slice(0, 8)}</span>
-              </span>
-            )}
+            <Suspense fallback={null}>
+              <OrderReference />
+            </Suspense>
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild>
