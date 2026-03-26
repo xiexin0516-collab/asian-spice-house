@@ -17,6 +17,13 @@ export default async function ProductPage({ params }: { params: Params }) {
   const item = product || kit
   if (!item) notFound()
 
+  const displayWeight =
+    "weight" in item && item.weight
+      ? /^\d+$/.test(item.weight)
+        ? `${item.weight}g`
+        : item.weight
+      : ""
+
   const isKit = !!kit
   const productType = isKit ? "kit" as const : "spice" as const
   const [reviews, reviewStats, allSpices] = await Promise.all([
@@ -118,7 +125,7 @@ export default async function ProductPage({ params }: { params: Params }) {
                 )}
                 {"weight" in item && item.weight && (
                   <p className="text-muted-foreground">
-                    <span className="font-medium text-foreground">Spec: </span> {item.weight}
+                    <span className="font-medium text-foreground">Spec: </span> {displayWeight}
                   </p>
                 )}
                 {"servings" in item && item.servings && (

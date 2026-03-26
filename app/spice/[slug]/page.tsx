@@ -22,6 +22,8 @@ export default async function SpiceDetailPage({ params }: { params: Params }) {
   const [spice, cuisines] = await Promise.all([getSpiceBySlug(slug), fetchCuisines()])
   if (!spice) notFound()
 
+  const displayWeight = /^\d+$/.test(spice.weight) ? `${spice.weight}g` : spice.weight
+
   const [relatedRecipes, relatedSpicesByCuisine, reviews, reviewStats] = await Promise.all([
     getRecipesForSpice(spice.id).then((r) => r.slice(0, 3)),
     Promise.all(spice.cuisines.map((c) => getSpicesByCuisine(c))).then((arr) =>
@@ -92,7 +94,7 @@ export default async function SpiceDetailPage({ params }: { params: Params }) {
                   ${spice.price.toFixed(2)}
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  / {spice.weight}
+                  / {displayWeight}
                 </span>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Stars value={reviewStats.average} size="sm" />

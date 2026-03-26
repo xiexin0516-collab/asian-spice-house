@@ -159,7 +159,10 @@ export default async function KitDetailPage({ params }: { params: Promise<{ slug
                       <li key={spice.id} className="flex items-start gap-3">
                         <Check className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
                         <span className="text-foreground">
-                          {spice.name} <span className="text-muted-foreground">({spice.weight || "250g"})</span>
+                          {spice.name}{" "}
+                          <span className="text-muted-foreground">
+                            ({spice.weight ? (/^\d+$/.test(spice.weight) ? `${spice.weight}g` : spice.weight) : "250g"})
+                          </span>
                         </span>
                       </li>
                     ))
