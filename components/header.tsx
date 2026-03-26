@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ShoppingBag, Menu, X, Globe, ChevronDown, LogIn, LogOut, User } from "lucide-react"
+import { ShoppingBag, Menu, X, ChevronDown, LogIn, LogOut, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -23,20 +23,12 @@ const navigation = [
   { name: "Our Story", href: "/about" },
 ]
 
-// English-first：当前只保留 EN，其它语言以后有需要再加
-const languages = [
-  { code: "en", name: "EN", fullName: "English" },
-]
-
 export function Header() {
   const router = useRouter()
   const { count: cartCount } = useCart()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [currentLang, setCurrentLang] = useState("en")
   const [user, setUser] = useState<AuthUser | null>(null)
   const [mounted, setMounted] = useState(false)
-
-  const currentLanguage = languages.find(l => l.code === currentLang) || languages[0]
 
   useEffect(() => {
     setMounted(true)
@@ -116,11 +108,6 @@ export function Header() {
                 <LogIn className="h-4 w-4" />
                 Sign in
               </span>
-              <span className="hidden sm:flex gap-1 h-9 px-2 items-center text-xs tracking-wide">
-                <Globe className="h-4 w-4" />
-                {currentLanguage.name}
-                <ChevronDown className="h-3 w-3 opacity-50" />
-              </span>
             </>
           ) : (
             <>
@@ -148,29 +135,6 @@ export function Header() {
                   </Button>
                 </Link>
               )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="hidden sm:flex gap-1 h-9 px-2">
-                    <Globe className="h-4 w-4" />
-                    <span className="text-xs tracking-wide">{currentLanguage.name}</span>
-                    <ChevronDown className="h-3 w-3 opacity-50" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-40">
-                  {languages.map((lang) => (
-                    <DropdownMenuItem
-                      key={lang.code}
-                      onClick={() => setCurrentLang(lang.code)}
-                      className={cn(
-                        "cursor-pointer text-xs tracking-wide",
-                        currentLang === lang.code && "bg-muted font-medium"
-                      )}
-                    >
-                      {lang.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
             </>
           )}
           <Link href="/cart">
@@ -224,25 +188,6 @@ export function Header() {
                 Sign in
               </Link>
             )}
-          </div>
-          <div className="pt-4">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">Language</p>
-            <div className="flex gap-3">
-              {languages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => setCurrentLang(lang.code)}
-                  className={cn(
-                    "px-4 py-2 text-xs tracking-wide uppercase border transition-colors",
-                    currentLang === lang.code
-                      ? "bg-foreground text-background border-foreground"
-                      : "bg-transparent text-foreground border-border hover:border-foreground"
-                  )}
-                >
-                  {lang.name}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </div>
