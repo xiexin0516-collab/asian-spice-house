@@ -150,12 +150,20 @@ export default async function KitDetailPage({ params }: { params: Promise<{ slug
                   </h2>
                 </div>
                 <ul className="space-y-3">
-                  {kit.includes.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                      <span className="text-foreground">{item}</span>
+                  {kitSpices.length === 0 ? (
+                    <li className="text-sm text-muted-foreground">
+                      Included items will be listed soon.
                     </li>
-                  ))}
+                  ) : (
+                    kitSpices.map((spice) => (
+                      <li key={spice.id} className="flex items-start gap-3">
+                        <Check className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
+                        <span className="text-foreground">
+                          {spice.name} <span className="text-muted-foreground">({spice.weight || "250g"})</span>
+                        </span>
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
 
