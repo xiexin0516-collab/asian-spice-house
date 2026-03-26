@@ -256,6 +256,28 @@ export default async function KitDetailPage({ params }: { params: Promise<{ slug
                   </Link>
                 ))}
               </div>
+
+              {/* Cooking Steps (from first linked recipe) */}
+              {kitRecipes[0]?.steps?.length > 0 && (
+                <div className="mt-14 border-t border-border pt-10">
+                  <h2 className="font-serif text-2xl md:text-3xl text-foreground">
+                    Cooking Steps
+                  </h2>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    A quick guide from the recipe card. For full details, view the recipe above.
+                  </p>
+                  <ol className="mt-6 space-y-4">
+                    {kitRecipes[0].steps.slice(0, 8).map((step, idx) => (
+                      <li key={idx} className="flex gap-4">
+                        <span className="mt-0.5 h-7 w-7 shrink-0 rounded-full bg-muted flex items-center justify-center text-sm text-foreground">
+                          {idx + 1}
+                        </span>
+                        <p className="text-muted-foreground leading-relaxed">{step}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
           </section>
         )}

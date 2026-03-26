@@ -117,6 +117,32 @@ export default async function SpiceDetailPage({ params }: { params: Params }) {
                 {spice.description}
               </p>
 
+              {/* Details (includes storage text) */}
+              {spice.details && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide">Details</h3>
+                  <p className="mt-2 text-muted-foreground leading-relaxed whitespace-pre-line">
+                    {spice.details}
+                  </p>
+                </div>
+              )}
+
+              {/* Ingredients */}
+              {spice.ingredients && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide">Ingredients</h3>
+                  <p className="mt-2 text-muted-foreground leading-relaxed">{spice.ingredients}</p>
+                </div>
+              )}
+
+              {/* How to use */}
+              {spice.howToUse && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide">How to use</h3>
+                  <p className="mt-2 text-muted-foreground leading-relaxed">{spice.howToUse}</p>
+                </div>
+              )}
+
               {/* Product Details */}
               <div className="mt-8 grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-3">
